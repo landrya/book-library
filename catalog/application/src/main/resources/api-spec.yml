@@ -1,0 +1,238 @@
+openapi: 3.0.3
+info:
+  title: BOOK Library API
+  description: |-
+    This is definition for the BOOK Library API
+
+  version: v0.1
+externalDocs:
+  description: Find out more about BOOK Library
+  url: https://book-library.readme.io/
+servers:
+  - url: http://comming-soon.com
+tags:
+  - name: Catalog
+    description: Operations linked to the catalog
+paths:
+  /catalog/book:
+    get:
+      summary: List all Books form the catalog
+      description: List all books from the catalog
+      operationId: listBooks
+      tags:
+        - Catalog
+      responses:
+        200:
+          description: Books found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogBookListDto'
+    post:
+      summary: add book to catalog
+      description: add a new book in the catalog
+      operationId: addBook
+      requestBody:
+        description: Book
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddBookToCatalogDto'
+      tags:
+        - Catalog
+      responses:
+        201:
+          description: book successfully added to catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdDto'
+
+  /catalog/book/{id}:
+    get:
+      summary: List all Books form the catalog
+      description: List all books from the catalog
+      operationId: getBookById
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: isbn of the book
+      tags:
+        - Catalog
+      responses:
+        200:
+          description: Books found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogBookDetailsDto'
+    put:
+      summary: add book to catalog
+      description: add a new book in the catalog
+      operationId: updateBook
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of the book
+      requestBody:
+        description: Book
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookDto'
+      tags:
+        - Catalog
+      responses:
+        204:
+          description: book successfully added to catalog
+    delete:
+      summary: remove book from catalog
+      description: remove a book from the catalog
+      operationId: removeBook
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: id of the book
+      tags:
+        - Catalog
+      responses:
+        204:
+          description: book successfully added to catalog
+
+components:
+  schemas:
+    CatalogBookDetailsDto:
+      required:
+        - isbn
+        - authors
+        - title
+      type: object
+      properties:
+        title:
+          type: string
+          example: "1519407386"
+        isbn:
+          type: string
+          example: "1519407386"
+        authors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          example: [ "BOOK" ]
+        description:
+          type: string
+          example: "Here is an example of book description"
+        image:
+          $ref: '#/components/schemas/BookImageDto'
+        tags:
+          type: array
+          items:
+            type: string
+        prices:
+          type: object
+          additionalProperties:
+            type: string
+    UpdateBookDto:
+      type: object
+      properties:
+        isbn:
+          type: string
+          example: "1519407386"
+        title:
+          type: string
+          example: "1519407386"
+        authors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          example: [ "BOOK" ]
+        description:
+          type: string
+          example: "Here is an example of book description"
+        image:
+          $ref: '#/components/schemas/BookImageDto'
+        tags:
+          type: array
+          items:
+            type: string
+        prices:
+          type: object
+          additionalProperties:
+            type: string
+    AddBookToCatalogDto:
+      required:
+        - isbn
+        - authors
+        - title
+      type: object
+      properties:
+        title:
+          type: string
+          example: "1519407386"
+        isbn:
+          type: string
+          example: "1519407386"
+        authors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          example: [ "BOOK" ]
+        description:
+          type: string
+          example: "Here is an example of book description"
+        image:
+          $ref: '#/components/schemas/BookImageDto'
+        tags:
+          type: array
+          items:
+            type: string
+        prices:
+          type: object
+          additionalProperties:
+            type: string
+    CatalogBookSummaryDto:
+      type: object
+      properties:
+        isbn:
+          type: string
+          example: "1519407386"
+        title:
+          type: string
+          example: "1519407386"
+        authors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          example: [ "BOOK" ]
+    CatalogBookListDto:
+      type: object
+      properties:
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogBookSummaryDto'
+    BookImageDto:
+      type: object
+      properties:
+        frontUrl:
+          type: string
+        backUrl:
+          type: string
+    IdDto:
+      type: object
+      properties:
+        id:
+          type: string
